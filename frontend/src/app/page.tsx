@@ -17,7 +17,7 @@ export default function Home() {
             <GlassButton variant="primary" className="w-full sm:w-auto px-8 bg-blue-600 hover:bg-blue-700 border-none shadow-blue-500/20">AI Chat</GlassButton>
           </Link>
           <Link href="/dashboard">
-            <GlassButton variant="secondary" className="w-full sm:w-auto px-8 border-gray-200 text-gray-700 hover:bg-gray-50">Dashboard</GlassButton>
+            <GlassButton variant="secondary" className="w-full sm:w-auto px-8 border-gray-200 text-gray-800 font-medium hover:bg-gray-100 hover:text-gray-900 transition-colors">Dashboard</GlassButton>
           </Link>
         </div>
       </GlassCard>
