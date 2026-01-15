@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: Todo AI Chatbot API
+  version: 1.0.0
+paths:
+  /api/{user_id}/chat:
+    post:
+      summary: Send a message to the AI Chatbot
+      operationId: sendMessage
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversation_id:
+                  type: string
+                  format: uuid
+                  nullable: true
+                  description: ID of existing conversation. If null, creates new.
+                message:
+                  type: string
+                  description: The user's natural language input.
+              required:
+                - message
+      responses:
+        '200':
+          description: AI Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversation_id:
+                    type: string
+                    format: uuid
+                  message:
+                    type: string
+                    description: The AI's reply.
+                  tool_used:
+                    type: boolean
+                    description: Whether a tool was executed.
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+
+  /api/{user_id}/chat/history:
+    get:
+      summary: Get conversation history or list of conversations
+      operationId: getHistory
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: conversation_id
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of conversations or messages
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+
+components:
+  schemas:
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        role:
+          type: string
+          enum: [user, assistant, tool]
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
