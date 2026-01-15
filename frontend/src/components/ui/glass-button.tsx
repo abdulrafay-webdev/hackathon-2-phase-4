@@ -16,7 +16,7 @@ export function GlassButton({
   
   const variants = {
     primary: "bg-blue-600/80 hover:bg-blue-500/90 text-white",
-    secondary: "bg-white/10 hover:bg-white/20 text-white",
+    secondary: "bg-white/50 hover:bg-white/70 text-gray-800 border-gray-200",
     danger: "bg-red-500/80 hover:bg-red-400/90 text-white",
   };
 
