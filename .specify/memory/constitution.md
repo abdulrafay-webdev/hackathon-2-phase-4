@@ -1,68 +1,73 @@
 <!-- 
   Sync Impact Report:
-  - Version change: 1.0.0 → 2.0.0
+  - Version change: 2.0.0 → 3.0.0 (Phase IV Launch)
   - Modified principles:
-    - Added I. Agentic Development Protocol (Strict SDD, No Manual Coding)
-    - Added II. Stateless AI Architecture (MCP, OpenAI SDK, DB State)
-    - Added III. Evolutionary Implementation (Extend don't duplicate)
-    - Modified IV. Interactive User Experience (Conversational + Modern UI)
-    - Modified V. Secure Configuration (Explicit "Why & Where")
-  - Added sections: None
-  - Removed sections: None
-  - Templates requiring updates: None
+    - Renamed & Expanded I: "Agentic Development" → "AI-Native DevOps" (Focus on Docker/K8s agents)
+    - Renamed & Expanded II: "Stateless AI Architecture" → "Stateless & Ephemeral Architecture" (K8s focus)
+    - Renamed V: "Secure Configuration" → "Security & Secrets Management"
+    - Retained III: "Evolutionary Implementation" (Deploying existing app)
+  - Added principles:
+    - II. Spec-Driven Infrastructure (Helm/K8s mandates)
+    - V. Observability & Debugging Readiness
+  - Removed principles:
+    - IV. Interactive User Experience (Focus shifts to Deployment UX)
+  - Templates requiring updates: 
+    - ✅ plan-template.md (Infrastructure/Helm sections)
+    - ✅ tasks-template.md (DevOps phases)
   - Follow-up TODOs: None
 -->
 
-# Phase 3 – Todo AI Chatbot Constitution
+# Phase 4 – Todo AI Chatbot Constitution
 
 ## Core Principles
 
-### I. Agentic Development Protocol
-**Zero Manual Coding.** The human user functions solely as an architect and decision-maker.
-- **Strict Stack:** Adhere strictly to the Agentic Dev Stack: **Constitution → Specification → Plan → Tasks → Implementation**.
-- **Lifecycle:** Do not skip steps. Every feature must be specified and planned before implementation code is written.
+### I. AI-Native DevOps
+**Agents First.** The primary interface for infrastructure creation and management is AI.
+- **Tooling:** Utilize **Docker AI Gordon**, **kubectl-ai**, and **kagent** for operational tasks.
+- **No Manual YAML:** Avoid writing Kubernetes manifests or Dockerfiles manually. Instruct agents to generate them from specifications.
+- **Human Role:** Architect and Auditor. Review generated infrastructure code for security and correctness.
 
-### II. Stateless AI Architecture
-The system MUST be designed as a stateless orchestration layer over a persistent database.
-- **Backend & MCP:** Both the Backend and MCP tools must be fully **STATELESS**.
-- **Persistence:** All state (tasks, conversations, message history, user preferences) MUST persist in the database (PostgreSQL/SQLModel).
-- **SDK Compliance:** Use **only** the Official MCP SDK and OpenAI Agents SDK for AI logic.
-- **Scalability:** System must survive restarts without state loss.
+### II. Spec-Driven Infrastructure
+Infrastructure is Code, and Code comes from Specs.
+- **Helm Standard:** All deployments must be packaged as **Helm Charts**.
+- **Definition:** Infrastructure requirements (replicas, resources, ingress) must be defined in `specs/` before `helm install`.
+- **Reproducibility:** The deployment process must be repeatable on any fresh Minikube instance.
 
-### III. Evolutionary Implementation
-**Extend, Do Not Duplicate.** This is Phase 3, operating *inside* the existing Phase 2 Todo App.
-- **Reuse:** Leverage existing Phase 2 logic (Auth, Data Models, API Endpoints) wherever possible.
-- **Integration:** New features (Chatbot, AI analysis) must integrate seamlessly with the current architecture.
-- **Hygiene:** Do not create parallel systems for identical entities (e.g., use the existing `Todo` model, don't make a `Task` model if `Todo` suffices).
+### III. Stateless & Ephemeral Architecture
+The application layout must align with Cloud Native patterns.
+- **Cattle, Not Pets:** Pods must be capable of restarting or being killed at any time without data loss.
+- **External State:** All persistence (Database) relies on **Neon PostgreSQL**. The K8s cluster treats the DB as an external resource (or strictly managed StatefulSet if local).
+- **Configuration:** Runtime config is injected via ConfigMaps and Secrets, never baked into images.
 
-### IV. Interactive User Experience
-The User Experience shifts to a conversational-first interface while maintaining visual polish.
-- **Conversational Tone:** Confirm every task action (creation, deletion, update) in a friendly, helpful conversational tone.
-- **Graceful Handling:** Handle errors (e.g., "task not found", "invalid input") gracefully with helpful prompts, not raw error dumps.
-- **Visuals:** Maintain the **Modern Frontend Standards** (Glassmorphism, Tailwind, Next.js) defined in Phase 2 for all UI elements.
+### IV. Security & Secrets Management
+Zero trust for local or cloud environments.
+- **Secrets Management:** Never commit secrets to Git. Use `.env` for local simulation and K8s Secrets for cluster injection.
+- **Least Privilege:** Service accounts and container permissions should be minimized (e.g., non-root users in Dockerfiles).
+- **Transparency:** Explicitly document required secrets in `quickstart.md`.
 
-### V. Secure Configuration & Transparency
-Never proceed with missing configuration or assumptions.
-- **Ask First:** If an environment variable, credential, or key is missing, **PAUSE** and ask the user.
-- **Explain Context:** For every request, explain **WHY** it is needed and **WHERE** the user can obtain it.
-- **Security:** Never hardcode secrets. All keys must be loaded from `.env`.
+### V. Observability & Debugging Readiness
+If you can't see it, it doesn't work.
+- **Logs:** All containers must emit structured logs to stdout/stderr.
+- **Health Checks:** Implement Liveness and Readiness probes for all services.
+- **Access:** Ensure generic instructions exist for accessing logs and shells (`kubectl logs`, `kubectl exec`) for debugging.
 
-### VI. Documentation & Standards Adherence
-- **Authoritative Sources:** Follow official documentation (Clerk, Next.js, FastAPI, OpenAI, MCP) strictly.
-- **Type Safety:** Maintain strict typing (TypeScript/Pydantic) across the stack.
+### VI. Evolutionary Implementation
+**Deploy the Existing.** We are moving the Phase 3 application to the Cloud.
+- **No Rewrites:** Do not refactor application business logic unless strictly required for containerization (e.g., changing host binding to `0.0.0.0`).
+- **Compatibility:** The containerized version must match the behavior of the local dev version.
 
 ## Development Workflow
 
-1.  **Specify**: Define the requirement in `specs/`.
-2.  **Plan**: Architect the solution in `specs/<feature>/plan.md`.
-3.  **Task**: Break down into testable steps in `specs/<feature>/tasks.md`.
-4.  **Implement**: Execute tasks using the established principles.
-5.  **Verify**: Confirm functionality against the Spec and Constitution.
+1.  **Specify**: Define deployment requirements in `specs/`.
+2.  **Plan**: Architect the Helm Chart/K8s structure in `specs/<feature>/plan.md`.
+3.  **Task**: Break down Docker/K8s/Agent tasks in `specs/<feature>/tasks.md`.
+4.  **Implement**: Use AI Agents to generate Dockerfiles and Helm Charts.
+5.  **Verify**: Deploy to Minikube and validate via Health Checks and User scenarios.
 
 ## Governance
 
 **Amendments**: Changes to this constitution require a PR and approval from the project lead.
 **Versioning**: Semantic Versioning. Major bumps for breaking governance changes.
-**Compliance**: All code and plans must reference these principles.
+**Compliance**: All infrastructure code and plans must reference these principles.
 
-**Version**: 2.0.0 | **Ratified**: 2026-01-06 | **Last Amended**: 2026-01-15
+**Version**: 3.0.0 | **Ratified**: 2026-01-06 | **Last Amended**: 2026-02-05

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-config
+data:
+  BACKEND_HOST: {{ .Values.global.env.BACKEND_HOST }}
+  # In Minikube, we might need the external URL or use a proxy. 
+  # For now, we'll placeholder it or use a relative path if we had ingress.
+  # Since it's NodePort, it's tricky. 
+  NEXT_PUBLIC_API_URL: "http://localhost:8000/api/v1" # This needs to be updated by the user/script
